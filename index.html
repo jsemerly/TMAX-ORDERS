@@ -22,8 +22,10 @@
       box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
     }
 
-    h2 {
+    h1 {
       color: #444;
+      text-align: center;
+      font-size: 25px;
     }
 
     p {
@@ -80,22 +82,24 @@
   </style>
 </head>
 <body>
+
+  <H1>Copy the below message to send to Devan:</H1>
+
   <div class="container">
-    <p>Hi Devan</p>
-    <p>A new TMAX order has been received:</p>
-    <p>Please ship as soon as production is complete.</p>
+    <p>Hi Devan,</p>
     <br>
-    Open Tracking sheet: 
-    https://docs.google.com/spreadsheets/d/1671QJt91L3ONf4o8xmUj-jtByHCB6cl8Hng3PN6Z1l0/edit?usp=sharing
+    <p>A new TMAX order has been Placed: Please ship as soon as production is complete.</p>
     <br>
-    <p>Thanks!<br>
-    Halotherapy Solutions' Delivery Team</p>
+    <a href="https://docs.google.com/spreadsheets/d/1671QJt91L3ONf4o8xmUj-jtByHCB6cl8Hng3PN6Z1l0/edit?usp=sharing">Open Tracking sheet:</a>
+    <br>
+    <p>Thanks!</p>
+    <br>
 
-    <button onclick="copyMessage()">Copy Confirmation Message</button>
-    <div id="toast">Message copied to clipboard ✅</div>
-
-  <button onclick="location.href='mailto:jacqueline@halotherapysolutions.com';">send mail</button>
-  </div>
+<a href="https://outlook.office.com/mail/deeplink/compose?to=jacqueline@halotherapysolutions.com;jacqueline.semerly@gmail.com&subject=New%20TMAX%20Order%20Placed&body=Hi%20Devan,%0D%0A%0D%0AA%20new%20TMAX%20order%20has%20been%20placed:%20Please%20ship%20as%20soon%20as%20production%20is%20complete.%0D%0A%0D%0AOpen%20Tracking%20sheet%3A%20https%3A%2F%2Fdocs.google.com%2Fspreadsheets%2Fd%2F1671QJt91L3ONf4o8xmUj-jtByHCB6cl8Hng3PN6Z1l0%2Fedit%3Fusp%3Dsharing%0D%0A%0D%0AThanks!&cc=jacqueline.semerly@gmail.com"
+   target="_blank"
+   style="display:inline-block; padding: 12px 20px; background-color: #0078D4; color: white; text-decoration: none; border-radius: 5px; font-size: 16px;">
+  Send Email via Outlook
+</a>
 
   <script>
     const params = new URLSearchParams(window.location.search);
@@ -119,21 +123,14 @@
       const message = 
 `Hi Devan,
 
-A new TMAX order has been received:
-Please ship as soon as production is complete.
+A new TMAX order has been received: Please ship as soon as production is complete.
 
 TMAX Tracker Sheet: 
 https://docs.google.com/spreadsheets/d/1671QJt91L3ONf4o8xmUj-jtByHCB6cl8Hng3PN6Z1l0/edit?usp=sharing
 
-Customer Name: ${name}
-Email: ${email}
-Phone #: ${phone}
-Shipping Address: ${address}
-Number of Boxes/Timers: ${quantity}
 
-Thanks!
-Halotherapy Solutions' Delivery Team`;
-
+Thanks!;
+`
       navigator.clipboard.writeText(message).then(() => {
         const toast = document.getElementById("toast");
         toast.classList.add("show");

@@ -1,104 +1,153 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>TMAX Order Form</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>TMAX ORDER PLACED</title>
+
   <style>
     body {
       font-family: Arial, sans-serif;
-      background-color: #085e66;
+      background-color: #f9f9f9;
       padding: 40px;
       color: #333;
     }
 
-    .form-container {
-      max-width: 500px;
+    .container {
+      max-width: 600px;
       margin: auto;
-      background: #d1e6e9;
+      background: #fff;
       padding: 30px;
       border-radius: 8px;
-      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-      padding-right: 50px;
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
     }
 
-    input, textarea {
-      width: 100%;
-      padding: 10px;
-      margin-top: 10px;
-      margin-bottom: 20px;
-      border: 1px solid #ccc;
-      border-radius: 4px;
-      font-size: 16px;
+    h2 {
+      color: #444;
+    }
+
+    p {
+      line-height: 1.6;
+      margin: 8px 0;
+    }
+
+    .link {
+      margin-top: 16px;
+      display: block;
+      font-weight: bold;
+      color: #1a73e8;
+      text-decoration: underline;
     }
 
     button {
-      padding: 12px 20px;
+      padding: 10px 15px;
       background-color: #1a73e8;
       color: white;
       border: none;
       border-radius: 5px;
       cursor: pointer;
-      font-size: 16px;
+      margin: 20px auto 0;
       display: block;
-      width: 100%;
+      text-align: center;
     }
 
     button:hover {
       background-color: #155ab6;
     }
+
+    #toast {
+      visibility: hidden;
+      min-width: 240px;
+      background-color: #333;
+      color: #fff;
+      text-align: center;
+      border-radius: 6px;
+      padding: 12px;
+      position: fixed;
+      z-index: 1;
+      left: 50%;
+      bottom: 30px;
+      transform: translateX(-50%);
+      font-size: 16px;
+      opacity: 0;
+      transition: opacity 0.5s ease-in-out, visibility 0.5s;
+    }
+
+    #toast.show {
+      visibility: visible;
+      opacity: 1;
+    }
   </style>
 </head>
 <body>
-  <div class="form-container">
-    <h2>Place Your TMAX Order</h2>
-    <form id="tmaxForm">
-      <label for="name">Customer Name</label>
-      <input type="text" id="name" name="name" required>
+  <div class="container">
+    <h2>A new TMAX order has been received:</h2>
+    <p>Please ship as soon as production is complete.</p>
 
-      <label for="email">Email</label>
-      <input type="email" id="email" name="email" required>
+    <a class="link" id="trackingLink" href="#" target="_blank">Open Tracking Sheet</a>
 
-      <label for="phone">Phone #</label>
-      <input type="text" id="phone" name="phone" required>
+    <br>
+    <p><strong>Customer Name:</strong> <span id="name"></span></p>
+    <p><strong>Email:</strong> <span id="email"></span></p>
+    <p><strong>Phone #:</strong> <span id="phone"></span></p>
+    <p><strong>Shipping Address:</strong> <span id="address"></span></p>
+    <p><strong>Number of Boxes/Timers:</strong> <span id="quantity"></span></p>
 
-      <label for="address">Shipping Address</label>
-      <textarea id="address" name="address" rows="3" required></textarea>
+    <br>
+    <p>Thanks!<br>
+    Halotherapy Solutions' Delivery Team</p>
 
-      <label for="quantity">Number of Boxes/Timers</label>
-      <input type="number" id="quantity" name="quantity" required>
-
-      <button type="submit">Submit Order</button>
-    </form>
+    <button onclick="copyMessage()">Copy Confirmation Message</button>
+    <div id="toast">Message copied to clipboard ✅</div>
   </div>
 
   <script>
-    const form = document.getElementById("tmaxForm");
+    const params = new URLSearchParams(window.location.search);
 
-    form.addEventListener("submit", async (e) => {
-      e.preventDefault();
-      const data = Object.fromEntries(new FormData(form).entries());
+    document.getElementById('name').textContent = params.get('name') || '';
+    document.getElementById('email').textContent = params.get('email') || '';
+    document.getElementById('phone').textContent = params.get('phone') || '';
+    document.getElementById('address').textContent = params.get('address') || '';
+    document.getElementById('quantity').textContent = params.get('quantity') || '';
 
-      // Replace with your actual Apps Script webhook URL:
-const webhookURL = "https://script.google.com/macros/s/AKfycbyKIFTbVgi1bJ5TFkEbzrZ78UIQxC81DAnjeW3McmI4vwFZhiEUGNij-I8EXQm7Zl6j/exec";
+    const trackingSheetURL = "https://docs.google.com/spreadsheets/d/1671QJt91L3ONf4o8xmUj-jtByHCB6cl8Hng3PN6Z1l0/edit?usp=sharing";
+    document.getElementById('trackingLink').href = trackingSheetURL;
 
-      try {
-        await fetch(webhookURL, {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(data),
-        });
+    function copyMessage() {
+      const name = decodeURIComponent(params.get('name') || '');
+      const email = decodeURIComponent(params.get('email') || '');
+      const phone = decodeURIComponent(params.get('phone') || '');
+      const address = decodeURIComponent(params.get('address') || '');
+      const quantity = decodeURIComponent(params.get('quantity') || '');
 
-        // Redirect to confirmation page with query params
-        const params = new URLSearchParams(data).toString();
-        window.location.href = `/TMAX-ORDERS/confirm.html?${params}`;
-      } catch (err) {
-        console.error("Submission failed:", err);
-        alert("Failed to submit. Please try again.");
-      }
-    });
+      const message = 
+`Hi Devan,
+
+A new TMAX order has been received:
+Please ship as soon as production is complete.
+
+TMAX Tracker Sheet: 
+https://docs.google.com/spreadsheets/d/1671QJt91L3ONf4o8xmUj-jtByHCB6cl8Hng3PN6Z1l0/edit?usp=sharing
+
+Customer Name: ${name}
+Email: ${email}
+Phone #: ${phone}
+Shipping Address: ${address}
+Number of Boxes/Timers: ${quantity}
+
+Thanks!
+Halotherapy Solutions' Delivery Team`;
+
+      navigator.clipboard.writeText(message).then(() => {
+        const toast = document.getElementById("toast");
+        toast.classList.add("show");
+        setTimeout(() => {
+          toast.classList.remove("show");
+        }, 2500);
+      }).catch(err => {
+        console.error("Copy failed:", err);
+      });
+    }
   </script>
 </body>
 </html>

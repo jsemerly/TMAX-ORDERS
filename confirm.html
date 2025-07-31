@@ -1,11 +1,10 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>TMAX ORDER PLACED</title>
-</head>
-<body>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>TMAX ORDER PLACED</title>
+
   <style>
     body {
       font-family: Arial, sans-serif;
@@ -41,45 +40,43 @@
     }
 
     button {
-    padding: 10px 15px;
-    background-color: #1a73e8;
-    color: white;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    margin: 20px auto 0;
-    display: block;
-    text-align: center;
+      padding: 10px 15px;
+      background-color: #1a73e8;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      margin: 20px auto 0;
+      display: block;
+      text-align: center;
     }
 
     button:hover {
       background-color: #155ab6;
     }
 
-#toast {
-  visibility: hidden;
-  min-width: 240px;
-  background-color: #333;
-  color: #fff;
-  text-align: center;
-  border-radius: 6px;
-  padding: 12px;
-  position: fixed;
-  z-index: 1;
-  left: 50%;
-  bottom: 30px;
-  transform: translateX(-50%);
-  font-size: 16px;
-  opacity: 0;
-  transition: opacity 0.5s ease-in-out, visibility 0.5s;
-}
+    #toast {
+      visibility: hidden;
+      min-width: 240px;
+      background-color: #333;
+      color: #fff;
+      text-align: center;
+      border-radius: 6px;
+      padding: 12px;
+      position: fixed;
+      z-index: 1;
+      left: 50%;
+      bottom: 30px;
+      transform: translateX(-50%);
+      font-size: 16px;
+      opacity: 0;
+      transition: opacity 0.5s ease-in-out, visibility 0.5s;
+    }
 
-#toast.show {
-  visibility: visible;
-  opacity: 1;
-}
-
-
+    #toast.show {
+      visibility: visible;
+      opacity: 1;
+    }
   </style>
 </head>
 <body>
@@ -100,9 +97,10 @@
     <p>Thanks!<br>
     Halotherapy Solutions' Delivery Team</p>
 
-  <button onclick="copyMessage()">COPY</button>
-  <div id="toast">Message copied to clipboard ✅</div>
-</div>
+    <button onclick="copyMessage()">Copy Confirmation Message</button>
+    <div id="toast">Message copied to clipboard ✅</div>
+  </div>
+
   <script>
     const params = new URLSearchParams(window.location.search);
 
@@ -112,19 +110,17 @@
     document.getElementById('address').textContent = params.get('address') || '';
     document.getElementById('quantity').textContent = params.get('quantity') || '';
 
-    // Replace with your actual Google Sheet link:
     const trackingSheetURL = "https://docs.google.com/spreadsheets/d/1671QJt91L3ONf4o8xmUj-jtByHCB6cl8Hng3PN6Z1l0/edit?usp=sharing";
     document.getElementById('trackingLink').href = trackingSheetURL;
-    
- function copyMessage() {
-  const params = new URLSearchParams(window.location.search);
-  const name = decodeURIComponent(params.get('name') || '');
-  const email = decodeURIComponent(params.get('email') || '');
-  const phone = decodeURIComponent(params.get('phone') || '');
-  const address = decodeURIComponent(params.get('address') || '');
-  const quantity = decodeURIComponent(params.get('quantity') || '');
 
-  const message = 
+    function copyMessage() {
+      const name = decodeURIComponent(params.get('name') || '');
+      const email = decodeURIComponent(params.get('email') || '');
+      const phone = decodeURIComponent(params.get('phone') || '');
+      const address = decodeURIComponent(params.get('address') || '');
+      const quantity = decodeURIComponent(params.get('quantity') || '');
+
+      const message = 
 `Hi Devan,
 
 A new TMAX order has been received:
@@ -142,18 +138,16 @@ Number of Boxes/Timers: ${quantity}
 Thanks!
 Halotherapy Solutions' Delivery Team`;
 
-  navigator.clipboard.writeText(message).then(() => {
-    const toast = document.getElementById("toast");
-    toast.classList.add("show");
-    setTimeout(() => {
-      toast.classList.remove("show");
-    }, 2500);
-  }).catch(err => {
-    console.error("Copy failed:", err);
-  });
-}
-
-
-</script>
+      navigator.clipboard.writeText(message).then(() => {
+        const toast = document.getElementById("toast");
+        toast.classList.add("show");
+        setTimeout(() => {
+          toast.classList.remove("show");
+        }, 2500);
+      }).catch(err => {
+        console.error("Copy failed:", err);
+      });
+    }
+  </script>
 </body>
 </html>
